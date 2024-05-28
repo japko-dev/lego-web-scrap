@@ -11,15 +11,33 @@ async function scrapeData(url: string, code: number): Promise<void> {
         const $ = cheerio.load(data);
 
         // Extract the desired data
-        // Example: Extract the titles of articles from a blog page
         const productRow = $('.row.product')
-        const imageElement = productRow.children('div:first')
-        const descriptionElement = imageElement.next()
-        const priceElement = descriptionElement.next()
 
-        console.log(imageElement.html());
-        console.log(descriptionElement.html());
-        console.log(priceElement.html());
+        // First element
+        const imageElement = productRow.children('div:first')
+        const imageSrc = imageElement
+          .find('img')
+          .attr('src')
+
+        // Second element
+        const nameElement = imageElement.next()
+        const name = nameElement
+          .first()
+          .find('a')
+          .prop('innerText')
+
+        // Third element
+        const priceElement = nameElement.next()
+        const link = priceElement
+          .find('a')
+          .prop('href')
+        const price = priceElement.find('strong').text();
+
+        console.log(imageSrc);
+        console.log(name);
+        console.log(link);
+        console.log(price);
+
     } catch (error) {
         console.error('Error fetching the page:', error);
     }
